@@ -43,13 +43,13 @@ class Lesson(models.Model):
         verbose_name='Превью урока',
         help_text='Загрузите превью урока'
     )
-    link_to_video = models.ForeignKey(
+    link_to_course = models.ForeignKey(
         Course,
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
-        verbose_name='Ссылка на видео',
-        help_text='Выберите видео из списка'
+        verbose_name='Ссылка на курс',
+        help_text='Выберите курс из списка'
     )
 
     class Meta:
