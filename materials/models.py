@@ -19,6 +19,13 @@ class Course(models.Model):
         verbose_name='Описание курса',
         help_text='Введите описание курса'
     )
+    lessons = models.CharField(
+        max_length=100,
+        verbose_name='Уроки',
+        help_text='Введите уроки курса',
+        blank=True,
+        null=True
+    )
 
     class Meta:
         verbose_name = 'Курс'
@@ -43,7 +50,7 @@ class Lesson(models.Model):
         verbose_name='Превью урока',
         help_text='Загрузите превью урока'
     )
-    link_to_course = models.ForeignKey(
+    course_link = models.ForeignKey(
         Course,
         on_delete=models.SET_NULL,
         blank=True,

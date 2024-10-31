@@ -1,3 +1,11 @@
-from django.shortcuts import render
+from rest_framework import filters
 
-# Create your views here.
+from rest_framework.viewsets import ModelViewSet
+
+from users.models import Payments
+
+class PaymentsViewSet(ModelViewSet):
+    queryset = Payments.objects.all()
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ('date_payment')
+    filterset_fields = ('paid_course', 'paid_lesson', 'payment_method')
