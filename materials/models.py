@@ -19,13 +19,6 @@ class Course(models.Model):
         verbose_name='Описание курса',
         help_text='Введите описание курса'
     )
-    lessons = models.CharField(
-        max_length=100,
-        verbose_name='Уроки',
-        help_text='Введите уроки курса',
-        blank=True,
-        null=True
-    )
 
     class Meta:
         verbose_name = 'Курс'
