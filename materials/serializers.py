@@ -1,20 +1,22 @@
-from rest_framework.serializers import ModelSerializer, SerializerMethodField
+from rest_framework import serializers
 
-from materials.models import Course, Lesson
+from materials.validators import validate_links
+from materials.models import Course, Lesson, Subscribe
 
-class LessonSerializer(ModelSerializer):
+class LessonSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(validators=[validate_links])
     class Meta:
         model = Lesson
         fields = '__all__'
 
-class CourseSerializer(ModelSerializer):
+class CourseSerializer(serializers.ModelSerializer):
     lessons = LessonSerializer()
     class Meta:
         model = Course
         fields = '__all__'
 
-class CourseDetailSerializer(ModelSerializer):
-    number_of_lessons = SerializerMethodField()
+class CourseDetailSerializer(serializers.ModelSerializer):
+    number_of_lessons = serializers.SerializerMethodField()
     lessons = LessonSerializer(source='lesson_set', read_only=True, many=True)
 
     def get_number_of_lessons(self, course):
@@ -22,3 +24,8 @@ class CourseDetailSerializer(ModelSerializer):
     class Meta:
         model = Course
         fields = ('name', 'description', 'lessons', 'number_of_lessons')
+
+class SubscribeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subscribe
+        fields = '__all__'
