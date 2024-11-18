@@ -8,6 +8,8 @@ from materials.models import Course, Lesson, Subscribe
 from materials.paginations import CustomPagination
 from materials.serializers import CourseSerializer, LessonSerializer, CourseDetailSerializer, SubscribeSerializer
 from users.permissions import IsModer, IsOwner
+
+
 class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
     pagination_class = CustomPagination
