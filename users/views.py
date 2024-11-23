@@ -8,7 +8,7 @@ from users.serializers import UserSerializer, PaymentsSerializer
 from users.services import convert_rub_to_dollars, create_stripe_price, create_stripe_session
 
 class UserCreateAPIView(CreateAPIView):
-    serializer = UserSerializer
+    serializer_class = UserSerializer
     queryset = User.objects.all()
     permission_classes = (AllowAny,)
 
@@ -24,7 +24,7 @@ class PaymentsViewSet(ModelViewSet):
     filterset_fields = ('paid_course', 'paid_lesson', 'payment_method')
 
 class PaymentsCreateAPIView(CreateAPIView):
-    serializer = PaymentsSerializer
+    serializer_class = PaymentsSerializer
     queryset = Payments.objects.all()
 
     def perform_create(self, serializer):
