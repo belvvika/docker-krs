@@ -1,3 +1,4 @@
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -8,6 +9,7 @@ from materials.models import Course, Lesson, Subscribe
 from materials.paginations import CustomPagination
 from materials.serializers import CourseSerializer, LessonSerializer, CourseDetailSerializer, SubscribeSerializer
 from users.permissions import IsModer, IsOwner
+from materials.tasks import send_information_about_update
 
 
 class CourseViewSet(ModelViewSet):
@@ -27,6 +29,17 @@ class CourseViewSet(ModelViewSet):
         elif self.action == 'destroy':
             self.permission_classes = (~IsModer | IsOwner,)
         return super().get_permissions()
+
+    @action(detail=True, methods=('post',))
+    def subscribe(self, request, pk):
+        course = get_object_or_404(Course, pk=pk)
+        if course.subscribe.filter(pk=request.user.pk).exists():
+            course.subscribe.remove(request.user)
+        else:
+            course.subscribe.add(request.user)
+            send_information_about_update.delay(request.user.email)
+        serializer = self.get_serializer(course)
+        return Response(serializer.data)
 
 class LessonCreateApiView(CreateAPIView):
     queryset = Lesson.objects.all()
